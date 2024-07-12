@@ -50,7 +50,7 @@ LATESTARTSERVICE=false
 
 print_modname() {
   ui_print "*******************************"
-  ui_print "     Magisk Module Template    "
+  ui_print "       Magisk-PixelPhone       "
   ui_print "*******************************"
 }
 
@@ -65,15 +65,7 @@ print_modname() {
 # You don't need to remove the example below, these values will be overwritten by your own list
 # This is an example
 REPLACE="
-/system/app/Youtube
-/system/priv-app/SystemUI
-/system/priv-app/Settings
-/system/framework
-"
-
-# Construct your own list here, it will overwrite the example
-# !DO NOT! remove this if you don't need to replace anything, leave it empty as it is now
-REPLACE="
+/system/priv-app/GoogleDialer
 "
 
 ##########################################################################################
@@ -85,17 +77,11 @@ REPLACE="
 set_permissions() {
   # Default permissions, don't remove them
   set_perm_recursive  $MODPATH  0  0  0755  0644
-
-  # Only some special files require specific permissions
-  # The default permissions should be good enough for most cases
-
-  # Some templates if you have no idea what to do:
-
-  # set_perm_recursive  <dirname>                <owner> <group> <dirpermission> <filepermission> <contexts> (default: u:object_r:system_file:s0)
-  # set_perm_recursive  $MODPATH/system/lib       0       0       0755            0644
-
-  # set_perm  <filename>                         <owner> <group> <permission> <contexts> (default: u:object_r:system_file:s0)
-  # set_perm  $MODPATH/system/bin/app_process32   0       2000    0755         u:object_r:zygote_exec:s0
-  # set_perm  $MODPATH/system/bin/dex2oat         0       2000    0755         u:object_r:dex2oat_exec:s0
-  # set_perm  $MODPATH/system/lib/libart.so       0       0       0644
+  
+on_install() {
+  # The following is the default implementation: extract $ZIPFILE/system to $MODPATH
+  # Extend/change the logic to whatever you want
+  ui_print "- Extracting module files"
+  unzip -o "$ZIPFILE" 'system/*' -d $MODPATH >&2
+}
 }
